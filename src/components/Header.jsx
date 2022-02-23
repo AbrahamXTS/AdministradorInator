@@ -6,6 +6,7 @@ export const Header = ({
 	setPresupuesto,
 	esPresupuestoValido,
 	setEsPresupuestoValido,
+	todosLosGastos
 }) => {
 	return (
 		<header>
@@ -14,6 +15,7 @@ export const Header = ({
             (
 				<ControlPresupuesto 
                     presupuesto={presupuesto}
+					todosLosGastos={todosLosGastos}
                 />
 			) : (
 				<NuevoPrespuesto

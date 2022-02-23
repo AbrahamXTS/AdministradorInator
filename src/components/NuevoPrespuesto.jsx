@@ -28,6 +28,7 @@ export const NuevoPrespuesto = ({
 				<div className="campo">
 					<label htmlFor="">Definir Presupuesto</label>
 					<input
+						min={0}
 						type="number"
 						value={presupuesto}
 						className="nuevo-presupuesto"

@@ -1,15 +1,32 @@
 import IconoCerrarModal from "../img/cerrar.svg";
-import { generarIdentificador }  from "../helpers/generarIdentificador"
-import { formateadorDeFecha } from '../helpers/formateadorDeFecha';
-import { Mensaje } from './Mensaje';
-import { useState } from "react";
+import { generarIdentificador } from "../helpers/generarIdentificador";
+import { formateadorDeFecha } from "../helpers/formateadorDeFecha";
+import { Mensaje } from "./Mensaje";
+import { useState, useEffect } from "react";
 
-export const ModalNuevoGasto = ({setModalNuevoGasto, animarModal,setAnimarModal, guardarNuevoGasto}) => {
-
+export const ModalNuevoGasto = ({
+	setModalNuevoGasto,
+	animarModal,
+	setAnimarModal,
+	guardarNuevoGasto,
+	gastoAEditar,
+}) => {
 	const [nombre, setNombre] = useState("");
 	const [gasto, setGasto] = useState("");
 	const [categoria, setCategoria] = useState("");
 	const [mensaje, setMensaje] = useState("");
+
+	useEffect(() => {
+		if (Object.keys(gastoAEditar).length > 0) {
+			// Si existe un gasto que se pretende editar
+			setNombre(gastoAEditar.nombre);
+			setGasto(gastoAEditar.gasto);
+			setCategoria(gastoAEditar.categoria);
+		}
+
+
+	}, [gastoAEditar])
+	
 
 	const handleCerrarModal = () => {
 		setAnimarModal(false);
@@ -21,17 +38,17 @@ export const ModalNuevoGasto = ({setModalNuevoGasto, animarModal,setAnimarModal,
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		
-		if([nombre, gasto, categoria].includes("")) {
+
+		if ([nombre, gasto, categoria].includes("")) {
 			setMensaje("Todos los campos son obligatorios");
 			setTimeout(() => setMensaje(""), 2000);
 		} else {
 			const id = generarIdentificador();
 			const fecha = formateadorDeFecha();
-			const datosDelNuevoGasto = {id, nombre, gasto, categoria, fecha}
+			const datosDelNuevoGasto = { id, nombre, gasto, categoria, fecha };
 			guardarNuevoGasto(datosDelNuevoGasto);
 		}
-	}
+	};
 
 	return (
 		<div className="modal">

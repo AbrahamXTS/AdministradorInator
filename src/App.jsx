@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import IconoNuevoGasto from "./img/nuevo-gasto.svg";
 import { ModalNuevoGasto } from "./components/ModalNuevoGasto";
@@ -15,6 +15,7 @@ function App() {
 
 	const handleNuevoGasto = () => {
 		setModalNuevoGasto(true);
+		setGastoAEditar({});
 
 		setTimeout(() => {
 			setAnimarModal(true);
@@ -31,6 +32,20 @@ function App() {
 		}, 300);
 	};
 
+	const [gastoAEditar, setGastoAEditar] = useState({});
+
+	useEffect(() => {
+		// Si el objeto gasto a editar está presente
+		if (Object.keys(gastoAEditar).length > 0) {
+			// Llamamos al modal
+			setModalNuevoGasto(true);
+
+			setTimeout(() => {
+				setAnimarModal(true);
+			}, 300);
+		}
+	}, [gastoAEditar]);
+
 	return (
 		<div className={modalNuevoGasto ? "fijar" : ""}>
 			<Header
@@ -39,13 +54,15 @@ function App() {
 				setPresupuesto={setPresupuesto}
 				esPresupuestoValido={esPresupuestoValido}
 				setEsPresupuestoValido={setEsPresupuestoValido}
-				todosLosGastos={todosLosGastos}
 			/>
 
 			{esPresupuestoValido && (
 				<>
 					<main>
-						<ListadoDeGastos todosLosGastos={todosLosGastos} />
+						<ListadoDeGastos
+							todosLosGastos={todosLosGastos}
+							setGastoAEditar={setGastoAEditar}
+						/>
 					</main>
 					<div className="nuevo-gasto">
 						<img
@@ -63,6 +80,7 @@ function App() {
 					animarModal={animarModal}
 					setAnimarModal={setAnimarModal}
 					guardarNuevoGasto={guardarNuevoGasto}
+					gastoAEditar={gastoAEditar}
 				/>
 			)}
 		</div>

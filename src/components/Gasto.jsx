@@ -25,22 +25,34 @@ const diccionarioIconos = {
 	Entretenimiento: IconoOcio,
 };
 
-export const Gasto = ({ datosDelGasto }) => {
+export const Gasto = ({ datosDelGasto, setGastoAEditar }) => {
 	const { nombre, gasto, categoria, fecha } = datosDelGasto;
 
 	const leadingActions = () => {
-
-	}
+		return (
+			<LeadingActions>
+				<SwipeAction onClick={() => setGastoAEditar(datosDelGasto)}>
+					Editar
+				</SwipeAction>
+			</LeadingActions>
+		);
+	};
 
 	const trailingActions = () => {
-		
-	}
+		return (
+			<TrailingActions>
+				<SwipeAction onClick={() => console.log("eliminando...")}>
+					Eliminar
+				</SwipeAction>
+			</TrailingActions>
+		);
+	};
 
 	return (
 		<SwipeableList>
 			<SwipeableListItem
-				leadingActions={leadingActions} // Acciones de izquierda a derecha
-				trailingActions={trailingActions} // De derecha a izquierda
+				leadingActions={leadingActions()} // Acciones de izquierda a derecha
+				trailingActions={trailingActions()} // De derecha a izquierda
 			>
 				<div className="gasto sombra">
 					<div className="contenido-gasto">

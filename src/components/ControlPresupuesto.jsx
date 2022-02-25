@@ -3,7 +3,13 @@ import { darFormatoDeMoneda } from "../helpers/formateadorDeMoneda";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-export const ControlPresupuesto = ({ presupuesto, todosLosGastos }) => {
+export const ControlPresupuesto = ({
+	presupuesto,
+	setPresupuesto,
+	todosLosGastos,
+	setTodosLosGastos,
+	setEsPresupuestoValido,
+}) => {
 	const [porcentaje, setPorcentaje] = useState(0);
 	const [disponible, setDisponible] = useState(0);
 	const [gastado, setGastado] = useState(0);
@@ -26,6 +32,15 @@ export const ControlPresupuesto = ({ presupuesto, todosLosGastos }) => {
 		setTimeout(() => setPorcentaje(nuevoPorcentaje), 800);
 	}, [todosLosGastos]);
 
+	const handleResetApp = () => {
+		const resultado = confirm("¿Está seguro que desea borrar los datos?");
+		if (resultado) {
+			setPresupuesto(0);
+			setTodosLosGastos([]);
+			setEsPresupuestoValido(false);
+		}
+	};
+
 	return (
 		<div className="contenedor-presupuesto contenedor sombra dos-columnas">
 			<div className="">
@@ -43,10 +58,13 @@ export const ControlPresupuesto = ({ presupuesto, todosLosGastos }) => {
 				/>
 			</div>
 			<div className="contenido-presupuesto">
+				<button className="reset-app" type="button" onClick={handleResetApp}>
+					Resetear App
+				</button>
 				<p>
 					<span>Presupuesto:</span> {darFormatoDeMoneda(presupuesto)}
 				</p>
-				<p>
+				<p className={porcentaje >= 70 ? "negativo" : ""}>
 					<span>Disponible:</span> {darFormatoDeMoneda(disponible)}
 				</p>
 				<p>

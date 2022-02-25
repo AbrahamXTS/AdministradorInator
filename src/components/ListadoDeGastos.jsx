@@ -1,17 +1,42 @@
 import { Gasto } from "./Gasto";
 
-const ListadoDeGastos = ({ todosLosGastos, setGastoAEditar, eliminarGasto }) => {
-
+const ListadoDeGastos = ({
+	todosLosGastos,
+	setGastoAEditar,
+	eliminarGasto,
+	filtro,
+	gastosFiltrados,
+}) => {
 	return (
 		<div className="listado-gasto contenedor">
-			<h3 className="no-gastos">
-				{Object.keys(todosLosGastos).length == 0
-					? "Aún no has registrado gastos"
-					: ""}
-			</h3>
-			{todosLosGastos.map((elemento) => (
-				<Gasto key={elemento.id} datosDelGasto={elemento} setGastoAEditar={setGastoAEditar} eliminarGasto={eliminarGasto}/>
-			))}
+			{filtro ? (
+				<>
+					<h2 className="no-gastos">
+						{Object.keys(gastosFiltrados).length == 0
+							? "Sin gastos registrados"
+							: ""}
+					</h2>
+					{gastosFiltrados.map((elemento) => (
+						<Gasto
+							key={elemento.id}
+							datosDelGasto={elemento}
+							setGastoAEditar={setGastoAEditar}
+							eliminarGasto={eliminarGasto}
+						/>
+					))}
+				</>
+			) : (
+				<>
+					{todosLosGastos.map((elemento) => (
+						<Gasto
+							key={elemento.id}
+							datosDelGasto={elemento}
+							setGastoAEditar={setGastoAEditar}
+							eliminarGasto={eliminarGasto}
+						/>
+					))}
+				</>
+			)}
 		</div>
 	);
 };

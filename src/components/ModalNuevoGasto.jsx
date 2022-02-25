@@ -1,6 +1,4 @@
 import IconoCerrarModal from "../img/cerrar.svg";
-import { generarIdentificador } from "../helpers/generarIdentificador";
-import { formateadorDeFecha } from "../helpers/formateadorDeFecha";
 import { Mensaje } from "./Mensaje";
 import { useState, useEffect } from "react";
 
@@ -10,25 +8,28 @@ export const ModalNuevoGasto = ({
 	setAnimarModal,
 	guardarNuevoGasto,
 	gastoAEditar,
+	setGastoAEditar
 }) => {
 	const [nombre, setNombre] = useState("");
 	const [gasto, setGasto] = useState("");
 	const [categoria, setCategoria] = useState("");
 	const [mensaje, setMensaje] = useState("");
+	const [id, setId] = useState("");
+	const [fecha, setFecha] = useState("");
 
 	useEffect(() => {
 		if (Object.keys(gastoAEditar).length > 0) {
 			// Si existe un gasto que se pretende editar
+			setId(gastoAEditar.id)
 			setNombre(gastoAEditar.nombre);
 			setGasto(gastoAEditar.gasto);
 			setCategoria(gastoAEditar.categoria);
+			setFecha(gastoAEditar.fecha);
 		}
-
-
-	}, [gastoAEditar])
-	
+	}, [gastoAEditar]);
 
 	const handleCerrarModal = () => {
+		setGastoAEditar({});
 		setAnimarModal(false);
 
 		setTimeout(() => {
@@ -43,8 +44,6 @@ export const ModalNuevoGasto = ({
 			setMensaje("Todos los campos son obligatorios");
 			setTimeout(() => setMensaje(""), 2000);
 		} else {
-			const id = generarIdentificador();
-			const fecha = formateadorDeFecha();
 			const datosDelNuevoGasto = { id, nombre, gasto, categoria, fecha };
 			guardarNuevoGasto(datosDelNuevoGasto);
 		}
@@ -62,10 +61,9 @@ export const ModalNuevoGasto = ({
 			{mensaje && <Mensaje tipo="error">{mensaje}</Mensaje>}
 			<form
 				onSubmit={handleSubmit}
-				// Si animarModal está igual a true, entonces agregamos las clases
 				className={`formulario ${animarModal ? "animar" : "cerrar"}`}
 			>
-				<legend>Nuevo Gasto</legend>
+				<legend>{gastoAEditar.nombre ? "Editar gasto" : "Nuevo gasto"}</legend>
 				<div className="campo">
 					<label htmlFor="Gasto">Nombre del gasto: </label>
 					<input
@@ -107,7 +105,10 @@ export const ModalNuevoGasto = ({
 						<option value="Entretenimiento">Entretenimiento</option>
 					</select>
 				</div>
-				<input type="submit" value="Añadir gasto" />
+				<input
+					type="submit"
+					value={gastoAEditar.nombre ? "Editar gasto" : "Nuevo gasto"}
+				/>
 			</form>
 		</div>
 	);

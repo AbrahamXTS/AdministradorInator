@@ -7,11 +7,17 @@ import { generarIdentificador } from "./helpers/generarIdentificador";
 import { formateadorDeFecha } from "./helpers/formateadorDeFecha";
 
 function App() {
-	const [presupuesto, setPresupuesto] = useState(0);
+	const [presupuesto, setPresupuesto] = useState(
+		Number(localStorage.getItem("Presupuesto")) ?? 0
+	);
+	const [todosLosGastos, setTodosLosGastos] = useState(
+		localStorage.getItem("Gastos")
+			? JSON.parse(localStorage.getItem("Gastos"))
+			: []
+	);
 	const [esPresupuestoValido, setEsPresupuestoValido] = useState(false);
 	const [modalNuevoGasto, setModalNuevoGasto] = useState(false);
 	const [animarModal, setAnimarModal] = useState(false);
-	const [todosLosGastos, setTodosLosGastos] = useState([]);
 	const [gastoAEditar, setGastoAEditar] = useState({});
 
 	const handleNuevoGasto = () => {
@@ -63,6 +69,20 @@ function App() {
 			}, 300);
 		}
 	}, [gastoAEditar]);
+
+	useEffect(() => {
+		localStorage.setItem("Presupuesto", presupuesto ?? 0);
+	}, [presupuesto]);
+
+	useEffect(() => {
+		if (Number(localStorage.getItem("Presupuesto")) > 0) {
+			setEsPresupuestoValido(true);
+		}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem("Gastos", JSON.stringify(todosLosGastos) ?? []);
+	}, [todosLosGastos]);
 
 	return (
 		<div className={modalNuevoGasto ? "fijar" : ""}>
